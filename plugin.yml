@@ -1,0 +1,5 @@
+name: Gungame
+author: Benji
+version: 1.0-SNAPSHOT
+main: de.benji.gungame.Gungame
+api-version: 1.16
