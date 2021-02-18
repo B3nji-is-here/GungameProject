@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class DatabaseHandler {
@@ -84,6 +85,17 @@ public class DatabaseHandler {
         databasename = configuration.getString("database");
         username = configuration.getString("username");
         password = configuration.getString("password");
+    }
+
+    public void createTables() {
+        if(isConnected()) {
+            try {
+                PreparedStatement statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS user (uuid VARCHAR(36) PRIMARY KEY, name VARCHAR(16), kills INT, deaths INT, currentKillstreak INT, longestKillstreak INT, currentKit INT);");
+                statement.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

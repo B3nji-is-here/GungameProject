@@ -18,7 +18,9 @@ public class Gungame extends JavaPlugin {
         databaseHandler = DatabaseHandler.getInstance();
         try {
             databaseHandler.connectToDatabase();
-            Bukkit.getLogger().info("Database is Connected");
+            Bukkit.getLogger().info("[Gungame] Database is Connected");
+            databaseHandler.createTables();
+            Bukkit.getLogger().info("[Gungame] Tables created or loaded");
         } catch (ClassNotFoundException | SQLException exception) {
             Bukkit.getLogger().info("Database is not Connected");
             exception.printStackTrace();
