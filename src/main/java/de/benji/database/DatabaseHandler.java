@@ -1,5 +1,6 @@
 package de.benji.database;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import javax.security.auth.login.Configuration;
@@ -13,7 +14,7 @@ public class DatabaseHandler {
 
     private static DatabaseHandler instance;
 
-    private File databaseFile = new File("plugins//Gungame//database.yml");
+    private File databaseFile = new File(Bukkit.getServer().getPluginManager().getPlugin("Gungame").getDataFolder(), "database.yml");
     private YamlConfiguration configuration;
 
     private String host = "";
@@ -28,6 +29,7 @@ public class DatabaseHandler {
         instance = this;
         if (!databaseFile.exists()) {
             try {
+                databaseFile.getParentFile().mkdir();
                 databaseFile.createNewFile();
                 configuration = YamlConfiguration.loadConfiguration(databaseFile);
                 configuration.set("host", "localhost");
