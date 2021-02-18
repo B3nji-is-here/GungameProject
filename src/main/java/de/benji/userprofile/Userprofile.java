@@ -1,6 +1,6 @@
 package de.benji.userprofile;
 
-import de.benji.database.DatabaseCallHandler;
+import de.benji.database.DatabaseHandler;
 import de.benji.gungame.Gungame;
 import de.benji.kitsystem.Kit;
 import lombok.Getter;
@@ -16,7 +16,7 @@ import java.sql.SQLException;
 @Getter@Setter
 public class Userprofile {
 
-    private Connection connection = DatabaseCallHandler.getInstance(Gungame.getInstance()).getConnection();
+    private Connection connection = DatabaseHandler.getInstance().getConnection();
 
     private Player player;
 
@@ -40,7 +40,7 @@ public class Userprofile {
     public void getDataFromDatabase() {
         if(exists()) {
             try {
-                PreparedStatement statement = connection.prepareStatement("SELECT kills, deaths, currentKillstreak, longestKillstreak, currentKit FROM users WHERE uuid=?");
+                PreparedStatement statement = connection.prepareStatement("SELECT kills, deaths, currentKillstreak, longestKillstreak, currentKit FROM user WHERE uuid=?");
                 statement.setString(1, uuid);
                 ResultSet resultSet = statement.executeQuery();
                 if(resultSet.next()) {
@@ -71,7 +71,7 @@ public class Userprofile {
             int kitId = 0;
             if(exists()) {
                 try {
-                    PreparedStatement statement = connection.prepareStatement("UPDATE users SET name=?, kills=?, deaths=?, currentKillstreak=?, longestKillstreak=?, currentKit=? WHERE uuid=?;");
+                    PreparedStatement statement = connection.prepareStatement("UPDATE user SET name=?, kills=?, deaths=?, currentKillstreak=?, longestKillstreak=?, currentKit=? WHERE uuid=?;");
                     statement.setString(1, name);
                     statement.setInt(2, kills);
                     statement.setInt(3, deaths);
@@ -85,7 +85,7 @@ public class Userprofile {
                 }
             } else {
                 try {
-                    PreparedStatement statement = connection.prepareStatement("INSERT IGNORE INTO users (uuid, name, kills, deaths, currentKillstreak, longestKillstreak, currentKit) VALUES (?, ?, ?, ?, ?, ?, ?);");
+                    PreparedStatement statement = connection.prepareStatement("INSERT IGNORE INTO user (uuid, name, kills, deaths, currentKillstreak, longestKillstreak, currentKit) VALUES (?, ?, ?, ?, ?, ?, ?);");
                     statement.setString(1, uuid);
                     statement.setString(2, name);
                     statement.setInt(3, kills);
@@ -103,7 +103,7 @@ public class Userprofile {
 
     public boolean exists() {
         try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE uuid=?;");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM user WHERE uuid=?;");
             statement.setString(1, uuid);
             ResultSet resultSet = statement.executeQuery();
             if(resultSet.next()) {

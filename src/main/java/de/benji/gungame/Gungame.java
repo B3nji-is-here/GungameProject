@@ -1,6 +1,7 @@
 package de.benji.gungame;
 
 import de.benji.database.DatabaseHandler;
+import de.benji.listener.PlayerJoinListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -25,6 +26,7 @@ public class Gungame extends JavaPlugin {
             Bukkit.getLogger().info("Database is not Connected");
             exception.printStackTrace();
         }
+        loadCommandsAndListener();
 
     }
 
@@ -35,6 +37,10 @@ public class Gungame extends JavaPlugin {
 
     public static Gungame getInstance() {
         return instance;
+    }
+
+    private void loadCommandsAndListener() {
+        Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(), this);
     }
 
 }
