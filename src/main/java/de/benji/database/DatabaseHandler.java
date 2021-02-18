@@ -1,5 +1,6 @@
 package de.benji.database;
 
+import de.benji.gungame.Gungame;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -89,12 +90,14 @@ public class DatabaseHandler {
 
     public void createTables() {
         if(isConnected()) {
-            try {
-                PreparedStatement statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS user (uuid VARCHAR(36) PRIMARY KEY, name VARCHAR(16), kills INT, deaths INT, currentKillstreak INT, longestKillstreak INT, currentKit INT);");
-                statement.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            Bukkit.getScheduler().runTaskAsynchronously(Gungame.getInstance(), () -> {
+                try {
+                    PreparedStatement statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS user (uuid VARCHAR(36) PRIMARY KEY, name VARCHAR(16), kills INT, deaths INT, currentKillstreak INT, longestKillstreak INT, currentKit INT);");
+                    statement.executeUpdate();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            });
         }
     }
 

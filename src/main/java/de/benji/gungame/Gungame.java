@@ -25,6 +25,7 @@ public class Gungame extends JavaPlugin {
             Bukkit.getLogger().info("Database is not Connected");
             exception.printStackTrace();
         }
+
     }
 
     @Override
