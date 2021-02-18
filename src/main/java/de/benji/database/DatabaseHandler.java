@@ -1,5 +1,10 @@
 package de.benji.database;
 
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import javax.security.auth.login.Configuration;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -8,16 +13,34 @@ public class DatabaseHandler {
 
     private static DatabaseHandler instance;
 
-    private String host = "localhost";
-    private String port = "3306";
-    private String databasename = "serversystem";
-    private String username = "root";
-    private String password = "minecraftadmin14527";
+    private File databaseFile = new File("plugins//Gungame//database.yml");
+    private YamlConfiguration configuration;
+
+    private String host = "";
+    private String port = "";
+    private String databasename = "";
+    private String username = "";
+    private String password = "";
 
     private Connection connection;
 
     private DatabaseHandler() {
         instance = this;
+        if (!databaseFile.exists()) {
+            try {
+                databaseFile.createNewFile();
+                configuration = YamlConfiguration.loadConfiguration(databaseFile);
+                configuration.set("host", "localhost");
+                configuration.set("port", "3306");
+                configuration.set("database", "gungame");
+                configuration.set("username", "root");
+                configuration.set("password", "gungame123");
+                configuration.save(databaseFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        getDatabaseLoginDataFromFile();
     }
 
     public static DatabaseHandler getInstance() {
@@ -50,6 +73,15 @@ public class DatabaseHandler {
 
     public Connection getConnection() {
         return connection;
+    }
+
+    public void getDatabaseLoginDataFromFile() {
+        configuration = YamlConfiguration.loadConfiguration(databaseFile);
+        host = configuration.getString("host");
+        port = configuration.getString("port");
+        databasename = configuration.getString("database");
+        username = configuration.getString("username");
+        password = configuration.getString("password");
     }
 
 }
